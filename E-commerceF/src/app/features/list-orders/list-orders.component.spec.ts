@@ -1,0 +1,22 @@
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+
+import { ListOrdersComponent } from './list-orders.component';
+
+describe('ListOrdersComponent', () => {
+  let component: ListOrdersComponent;
+  let fixture: ComponentFixture<ListOrdersComponent>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [ListOrdersComponent],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ListOrdersComponent);
+    component = fixture.componentInstance;
+    await fixture.whenStable();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});

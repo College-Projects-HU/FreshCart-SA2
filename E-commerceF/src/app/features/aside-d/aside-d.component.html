@@ -1,0 +1,169 @@
+<div class="flex flex-1 relative">
+
+    <!-- ── MOBILE: Backdrop overlay ── -->
+    <div
+      *ngIf="sidebarOpen"
+      (click)="closeSidebar()"
+      class="lg:hidden fixed inset-0 z-40"
+      style="background: rgba(15,23,42,0.5); backdrop-filter: blur(4px);"
+    ></div>
+
+    <!-- ── MOBILE: Sidebar drawer ── -->
+    <aside class="lg:hidden fixed inset-y-0 left-0 z-50 w-72 bg-white border-r border-slate-200/50 shadow-xl flex flex-col">
+
+  <!-- Drawer header -->
+  <div class="flex items-center justify-between p-4 border-b border-slate-100">
+    <div class="flex items-center gap-2">
+      <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-sky-500 to-sky-600 flex items-center justify-center">
+        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+        </svg>
+      </div>
+      <span class="font-semibold text-slate-800">Menu</span>
+    </div>
+    <button class="w-9 h-9 rounded-lg hover:bg-slate-100 flex items-center justify-center text-slate-500 transition">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Mobile nav -->
+  <nav class="p-4 space-y-1 flex-1 overflow-y-auto">
+
+    <!-- Dashboard -->
+    <a routerLink="/content"
+        routerLinkActive="bg-gradient-to-r from-sky-50 to-sky-100 text-sky-700 border border-sky-200 shadow-sm"    
+    class="flex items-center space-x-3 p-3 rounded-xl transition-all duration-200 group text-slate-600 hover:bg-slate-50 hover:text-slate-800">
+      <div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 bg-slate-100 group-hover:bg-slate-200 transition-colors">
+        <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+        </svg>
+      </div>
+      <span class="text-sm font-medium">Dashboard</span>
+      <i class="fa-solid fa-chevron-right"></i>
+    </a>
+
+    <!-- Products (active) -->
+    <a routerLink="/product" 
+       routerLinkActive="bg-gradient-to-r from-green-50 to-green-100 text-green-700 border border-green-200 shadow-sm" 
+       class="flex items-center space-x-3 p-3 rounded-xl transition-all duration-200 group ">
+      <div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ">
+        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10"/>
+        </svg>
+      </div>
+      <span class="text-sm font-medium">Products</span>
+      <i class="fa-solid fa-chevron-right"></i>
+    </a>
+
+    <!-- Users -->
+    <a  routerLink="/user" 
+        routerLinkActive="bg-gradient-to-r from-sky-50 to-sky-100 text-sky-700 border border-sky-200 shadow-sm" 
+    class="flex items-center space-x-3 p-3 rounded-xl transition-all duration-200 group text-slate-600 hover:bg-slate-50 hover:text-slate-800">
+      <div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 bg-slate-100 group-hover:bg-slate-200 transition-colors">
+        <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+        </svg>
+      </div>
+      <span class="text-sm font-medium">Users</span>
+      <i class="fa-solid fa-chevron-right"></i>
+    </a>
+    <a  routerLink="/list" 
+        routerLinkActive="bg-gradient-to-r from-sky-50 to-sky-100 text-sky-700 border border-sky-200 shadow-sm" 
+    class="flex items-center space-x-3 p-3 rounded-xl transition-all duration-200 group text-slate-600 hover:bg-slate-50 hover:text-slate-800">
+      <div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 bg-slate-100 group-hover:bg-slate-200 transition-colors">
+        <i class="fa-solid fa-bucket"></i>
+      </div>
+      <span class="text-sm font-medium">Order</span>
+      <i class="fa-solid fa-chevron-right"></i>
+    </a>
+
+
+    <!-- addProduct -->
+    <a routerLink="/addproduct" 
+        routerLinkActive="bg-gradient-to-r from-sky-50 to-sky-100 text-sky-700 border border-sky-200 shadow-sm" 
+    class="cursor-pointer flex items-center space-x-3 p-3 rounded-xl transition-all duration-200 group text-slate-600 hover:bg-slate-50 hover:text-slate-800">
+      <div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 bg-slate-100 group-hover:bg-slate-200 transition-colors">
+        <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+        </svg>
+      </div>
+      <span class="text-sm font-medium">addProduct</span>
+      <i class="fa-solid fa-chevron-right"></i>
+    </a>
+
+  </nav>
+
+  
+
+</aside>
+
+    <!-- ── DESKTOP Sidebar ── -->
+    <aside class="w-64 bg-white border-r border-slate-200/50 hidden lg:flex flex-col sticky top-16 h-[calc(100vh-4rem)]">
+  <nav class="p-6 space-y-1 flex-1 overflow-y-auto">
+
+    <!-- Dashboard -->
+    <a routerLink="/content"
+        routerLinkActive="bg-gradient-to-r from-green-50 to-green-100 text-green-700 border border-green-200 shadow-sm"
+     class="cursor-pointer flex items-center space-x-3 p-3 rounded-xl transition-all duration-200 group text-slate-600 hover:bg-slate-50 hover:text-slate-800">
+      <div routerLinkActive="bg-gradient-to-br from-green-500 to-green-600 shadow-sm text-white" class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 bg-slate-100 group-hover:bg-slate-200 transition-colors">
+        <i class="fa-solid fa-chart-bar"></i>
+      </div>
+      <span class="text-sm font-medium">Dashboard</span>
+      <i class="fa-solid fa-chevron-right"></i>
+    </a>
+
+    
+
+    <!-- Products (active) -->
+    <a routerLink="/products" 
+        routerLinkActive="bg-gradient-to-r from-green-50 to-green-100 text-green-700 border border-green-200 shadow-sm"
+    class="cursor-pointer flex items-center space-x-3 p-3 rounded-xl transition-all duration-200 group  text-slate-600 hover:bg-slate-50 hover:text-slate-800">
+      <div routerLinkActive="bg-gradient-to-br from-green-500 to-green-600 shadow-sm text-white" class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0  bg-slate-100 group-hover:bg-slate-200 transition-colors ">
+        <i class="fa-solid fa-box-open"></i>
+      </div>
+      <span class="text-sm font-medium">Products</span>
+      <i class="fa-solid fa-chevron-right"></i>
+    </a>
+
+    <!-- addProduct -->
+    <a routerLink="/addproduct" 
+      routerLinkActive="bg-gradient-to-r from-green-50 to-green-100 text-green-700 border border-green-200 shadow-sm"
+    class="cursor-pointer flex items-center space-x-3 p-3 rounded-xl transition-all duration-200 group text-slate-600 hover:bg-slate-50 hover:text-slate-800">
+      <div routerLinkActive="bg-gradient-to-br from-green-500 to-green-600 shadow-sm text-white" class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 bg-slate-100 group-hover:bg-slate-200 transition-colors">
+        <i class="fa-solid fa-plus"></i>
+      </div>
+      <span class="text-sm font-medium">addProducts</span>
+      <i class="fa-solid fa-chevron-right"></i>
+    </a>
+
+    <!-- Orders -->
+    <a routerLink="/list" 
+        routerLinkActive="bg-gradient-to-r from-green-50 to-green-100 text-green-700 border border-green-200 shadow-sm"
+    class="cursor-pointer flex items-center space-x-3 p-3 rounded-xl transition-all duration-200 group text-slate-600 hover:bg-slate-50 hover:text-slate-800">
+      <div routerLinkActive="bg-gradient-to-br from-green-500 to-green-600 shadow-sm text-white" class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 bg-slate-100 group-hover:bg-slate-200 transition-colors">
+        <i class="fa-solid fa-bucket"></i>
+      </div>
+      <span class="text-sm font-medium">Orders</span>
+      <i class="fa-solid fa-chevron-right"></i>
+    </a>
+     <!-- Users -->
+    <a routerLink="/user" 
+        routerLinkActive="bg-gradient-to-r from-green-50 to-green-100 text-green-700 border border-green-200 shadow-sm"
+    class="cursor-pointer flex items-center space-x-3 p-3 rounded-xl transition-all duration-200 group text-slate-600 hover:bg-slate-50 hover:text-slate-800">
+      <div routerLinkActive="bg-gradient-to-br from-green-500 to-green-600 shadow-sm text-white" class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 bg-slate-100 group-hover:bg-slate-200 transition-colors">
+        <i class="fa-solid fa-users"></i>
+      </div>
+      <span class="text-sm font-medium">Users</span>
+      <i class="fa-solid fa-chevron-right"></i>
+    </a>
+
+  </nav>
+</aside>
+
+    <!-- ════════════════════════════════════════════════
+         MAIN CONTENT
+    ════════════════════════════════════════════════ -->
+    
+  </div>

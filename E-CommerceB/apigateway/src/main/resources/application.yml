@@ -1,0 +1,97 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      routes:
+        # ── User Service ──────────────────────────────────────────────────
+        # Controllers use: /api/v1/auth/**
+        - id: user-service
+          uri: lb://user-service
+          predicates:
+            - Path=/api/v1/auth/**,/api/v1/admin/**,/api/v1/users/**
+          # NO StripPrefix — forward the full path as-is to the controller
+
+        # ── Product Service ───────────────────────────────────────────────
+        # Controllers use: /api/v1/products/**
+        - id: product-service
+          uri: lb://product-service
+          predicates:
+            - Path=/api/v1/products/**,/api/v2/admin/products/** ,/api/v1/categories/**,/api/v1/subcategories/**,/api/v1/brands/**
+          # NO StripPrefix — forward the full path as-is to the controller
+
+        # ── Order Service ────────────────────────────────────────────────────
+        # Controllers use: /api/v1/orders/** and /api/v1/admin/orders/**
+        - id: order-service
+          uri: lb://order-service
+          predicates:
+            - Path=/api/v1/orders/**,/api/v1/admin/orders/**
+          # NO StripPrefix — forward the full path as-is to the controller
+
+        # ── Cart Service ────────────────────────────────────────────────────
+        # Controllers use: /api/v1/cart/** 
+        - id: cart-service
+          uri: lb://cart-service
+          predicates:
+            - Path=/api/v1/cart/**
+          # NO StripPrefix — forward the full path as-is to the controller
+
+
+        # ── Wishlist Service ────────────────────────────────────────────────────
+        # Controllers use: /api/v1/wishlist/** 
+        - id: wishlist-service
+          uri: lb://wishlist-service
+          predicates:
+            - Path=/api/v1/wishlist/**
+          # NO StripPrefix — forward the full path as-is to the controller
+
+          # ── Payment Service ───────────────────────────────────────────────
+        # Controllers use: /api/v1/payments/** and /api/v1/admin/payments/**
+        - id: payment-service
+          uri: lb://payment-service
+          predicates: 
+            - Path=/api/v1/payments/**,/api/v1/admin/payments/**  
+          # NO StripPrefix — forward the full path as-is to the controller
+
+          # ── Global CORS Configuration ───────────────────────────────────────────────
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowedHeaders: "*"
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://${EUREKA_HOST:localhost}:${EUREKA_PORT:8761}/eureka/
+    fetch-registry: true
+    register-with-eureka: true
+  instance:
+    prefer-ip-address: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,gateway
+  endpoint:
+    gateway:
+      enabled: true
+
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG

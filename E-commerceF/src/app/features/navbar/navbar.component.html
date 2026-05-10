@@ -1,0 +1,263 @@
+<nav class="sticky top-0 z-40 w-full border-b border-gray-100 bg-white px-6 py-4 font-sans">
+  <div class="mx-auto flex max-w-7xl items-center justify-between gap-4">
+    <!-- logo  -->
+    <a routerLink="/home" class="shrink-0">
+      <img
+        src="/assets/fresh-logo.svg"
+        alt="FreshCart"
+        class="h-7 md:h-8"
+      />
+    </a>
+
+    <!-- input search  -->
+    <div class="hidden lg:block grow max-w-md">
+      <div class="group relative">
+        <input
+          type="text"
+          placeholder="Search for products..."
+          class="w-full rounded-full border border-gray-200 bg-gray-50 px-6 py-2 pr-12 outline-none transition-all focus:border-emerald-500 focus:ring-emerald-500"
+        />
+        <button
+          class="absolute right-1 top-1 bottom-1 flex w-9 items-center justify-center rounded-full bg-emerald-600 text-white transition-colors hover:bg-emerald-700"
+        >
+          <i class="fas fa-search text-xs"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- !---------------------------- links  !---------------------------- -->
+    <div class="hidden items-center gap-6 md:flex">
+      <a routerLink="/home" routerLinkActive="text-primary" class="font-medium text-gray-700 transition-colors hover:text-emerald-600">Home</a>
+      <a routerLink="/shop" routerLinkActive="text-primary" class="font-medium text-gray-700 transition-colors hover:text-emerald-600">Shop</a>
+      <div class="group relative">
+        <button
+          class="flex items-center gap-1 py-2 font-medium text-gray-700 transition-colors group-hover:text-emerald-600"
+        >
+          Categories
+          <i class="fas fa-chevron-down text-2xs transition-transform group-hover:rotate-180"></i>
+        </button>
+        <div
+          class="invisible absolute left-0 z-50 mt-0 w-48 rounded-lg border border-gray-100 bg-white opacity-0 shadow-xl transition-all duration-200 group-hover:visible group-hover:opacity-100"
+        >
+          <ul class="py-2 text-sm text-gray-700">
+            <li>
+              <a routerLink="/categories" routerLinkActive="text-primary" class="block px-4 py-2 hover:bg-emerald-50 hover:text-emerald-600"
+                >All Categories</a
+              >
+            </li>
+            
+          </ul>
+        </div>
+      </div>
+      <a routerLink="/brands" routerLinkActive="text-primary" class="font-medium text-gray-700 transition-colors hover:text-emerald-600">Brands</a>
+    </div>
+
+    <!-- ? --------------- ICONS  & signin ? ---------------  -->
+    <div class="flex items-center gap-2 md:gap-4">
+      <button
+        class="flex h-10 w-10 items-center justify-center rounded-full text-gray-600 transition-all hover:bg-gray-100 lg:hidden"
+      >
+        <i class="fas fa-search text-lg"></i>
+      </button>
+      <button 
+      routerLink="/wishlist" routerLinkActive="text-primary"
+        class="relative flex h-10 w-10 items-center justify-center rounded-full text-gray-600 transition-all hover:bg-gray-100 hover:text-emerald-600"
+      >
+        <i class="far fa-heart text-xl"></i>
+      </button>
+      <button
+      routerLink="/cart" routerLinkActive="text-primary"
+        class="relative flex h-10 w-10 items-center justify-center rounded-full text-gray-600 transition-all hover:bg-gray-100 hover:text-emerald-600"
+      >
+        <i class="fas fa-shopping-cart text-xl"></i>
+        <span
+          class="absolute right-1 top-1 rounded-full border-2 border-white bg-emerald-600 px-1.5 text-2xs font-bold text-white"
+          >{{count()}}</span
+        >
+      </button>
+
+      <div class="hidden sm:flex items-center gap-4 pl-2 md:border-l md:border-gray-200 md:pl-4">
+
+        @if (logged()) {
+        <button (click)="toggleMenu()" class="relative p-2.5 rounded-full hover:bg-gray-100 transition-colors group hover:text-green-600 text-2xl text-gray-500" title="Account">
+          <i class="fa-regular fa-circle-user "></i>
+        </button>
+        <div class="absolute right-0 top-full mt-2 w-64 bg-white border border-gray-100 rounded-2xl shadow-xl transition-all duration-200 origin-top-right  scale-95 " [class.opacity-0]="!isOpen"
+  [class.scale-95]="!isOpen"
+  [class.pointer-events-none]="!isOpen"
+  [class.opacity-100]="isOpen"
+  [class.scale-100]="isOpen">
+          <div class="p-4 border-b border-gray-100">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
+                <i class="fa-regular fa-circle-user text-2xl text-green-600"></i>
+              </div>
+              <div class="min-w-0">
+                <p class="text-sm font-semibold text-gray-800 truncate">{{nameU}}</p>
+                <p class="text-xs text-gray-400 truncate">{{emailU}}</p>
+              </div>
+            </div>
+          </div>
+          <div class="py-2">
+            
+            <a routerLink="/allorders" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-600 hover:text-primary-600 hover:bg-primary-50 transition-colors" href="/orders">
+              <svg data-prefix="fas" data-icon="box-open" class="svg-inline--fa fa-box-open w-4 text-gray-400" role="img" viewBox="0 0 640 512" aria-hidden="true">
+                <path fill="currentColor" d="M560.3 237.2c10.4 11.8 28.3 14.4 41.8 5.5 14.7-9.8 18.7-29.7 8.9-44.4l-48-72c-2.8-4.2-6.6-7.7-11.1-10.2L351.4 4.7c-19.3-10.7-42.8-10.7-62.2 0L88.8 116c-5.4 3-9.7 7.4-12.6 12.8L27.7 218.7c-12.6 23.4-3.8 52.5 19.6 65.1l33 17.7 0 53.3c0 23 12.4 44.3 32.4 55.7l176 99.7c19.6 11.1 43.5 11.1 63.1 0l176-99.7c20.1-11.4 32.4-32.6 32.4-55.7l0-117.5zm-240-9.8L170.2 144 320.3 60.6 470.4 144 320.3 227.4zm-41.5 50.2l-21.3 46.2-165.8-88.8 25.4-47.2 161.7 89.8z"></path>
+              </svg>
+              My Orders
+            </a>
+            <a routerLink="/wishlist" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-600 hover:text-primary-600 hover:bg-primary-50 transition-colors" href="/wishlist">
+              <svg data-prefix="far" data-icon="heart" class="svg-inline--fa fa-heart w-4 text-gray-400" role="img" viewBox="0 0 512 512" aria-hidden="true">
+                <path fill="currentColor" d="M378.9 80c-27.3 0-53 13.1-69 35.2l-34.4 47.6c-4.5 6.2-11.7 9.9-19.4 9.9s-14.9-3.7-19.4-9.9l-34.4-47.6c-16-22.1-41.7-35.2-69-35.2-47 0-85.1 38.1-85.1 85.1 0 49.9 32 98.4 68.1 142.3 41.1 50 91.4 94 125.9 120.3 3.2 2.4 7.9 4.2 14 4.2s10.8-1.8 14-4.2c34.5-26.3 84.8-70.4 125.9-120.3 36.2-43.9 68.1-92.4 68.1-142.3 0-47-38.1-85.1-85.1-85.1zM271 87.1c25-34.6 65.2-55.1 107.9-55.1 73.5 0 133.1 59.6 133.1 133.1 0 68.6-42.9 128.9-79.1 172.8-44.1 53.6-97.3 100.1-133.8 127.9-12.3 9.4-27.5 14.1-43.1 14.1s-30.8-4.7-43.1-14.1C176.4 438 123.2 391.5 79.1 338 42.9 294.1 0 233.7 0 165.1 0 91.6 59.6 32 133.1 32 175.8 32 216 52.5 241 87.1l15 20.7 15-20.7z"></path>
+              </svg>
+              My Wishlist
+            </a>
+             
+            <a routerLink="/cart" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-600 hover:text-primary-600 hover:bg-primary-50 transition-colors" href="/cart">
+              <svg data-prefix="fas" data-icon="cart-shopping" class="svg-inline--fa fa-cart-shopping w-4 text-gray-400" role="img" viewBox="0 0 576 512" aria-hidden="true">
+                  <path fill="currentColor" d="M0 24C0 10.7 10.7 0 24 0H69.5c22 0 41.5 12.8 50.6 32h411c26.3 0 45.5 25 38.6 50.4l-41 152.3c-8.5 31.4-37 53.3-69.5 53.3H170.7l5.4 28.5c2.2 11.3 12.1 19.5 23.6 19.5H488c13.3 0 24 10.7 24 24s-10.7 24-24 24H199.7c-34.6 0-64.3-24.6-70.7-58.5L77.4 54.5c-.7-3.8-4-6.5-7.9-6.5H24C10.7 48 0 37.3 0 24zM128 464a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm336-48a48 48 0 1 1 0 96 48 48 0 1 1 0-96z"/>
+              </svg>
+                  My Cart
+            </a>
+
+            
+            <a routerLink="/change" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-600 hover:text-primary-600 hover:bg-primary-50 transition-colors" href="/profile/settings">
+              <svg data-prefix="fas" data-icon="gear" class="svg-inline--fa fa-gear w-4 text-gray-400" role="img" viewBox="0 0 512 512" aria-hidden="true">
+                <path fill="currentColor" d="M195.1 9.5C198.1-5.3 211.2-16 226.4-16l59.8 0c15.2 0 28.3 10.7 31.3 25.5L332 79.5c14.1 6 27.3 13.7 39.3 22.8l67.8-22.5c14.4-4.8 30.2 1.2 37.8 14.4l29.9 51.8c7.6 13.2 4.9 29.8-6.5 39.9L447 233.3c.9 7.4 1.3 15 1.3 22.7s-.5 15.3-1.3 22.7l53.4 47.5c11.4 10.1 14 26.8 6.5 39.9l-29.9 51.8c-7.6 13.1-23.4 19.2-37.8 14.4l-67.8-22.5c-12.1 9.1-25.3 16.7-39.3 22.8l-14.4 69.9c-3.1 14.9-16.2 25.5-31.3 25.5l-59.8 0c-15.2 0-28.3-10.7-31.3-25.5l-14.4-69.9c-14.1-6-27.2-13.7-39.3-22.8L73.5 432.3c-14.4 4.8-30.2-1.2-37.8-14.4L5.8 366.1c-7.6-13.2-4.9-29.8 6.5-39.9l53.4-47.5c-.9-7.4-1.3-15-1.3-22.7s.5-15.3 1.3-22.7L12.3 185.8c-11.4-10.1-14-26.8-6.5-39.9L35.7 94.1c7.6-13.2 23.4-19.2 37.8-14.4l67.8 22.5c12.1-9.1 25.3-16.7 39.3-22.8L195.1 9.5zM256.3 336a80 80 0 1 0 -.6-160 80 80 0 1 0 .6 160z"></path>
+              </svg>
+              Settings
+            </a>
+          </div>
+          <div class="border-t border-gray-100 py-2">
+            <button (click)="logOut()"  class="flex items-center gap-3 px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 transition-colors w-full text-left"><svg data-prefix="fas" data-icon="right-from-bracket" class="svg-inline--fa fa-right-from-bracket w-4" role="img" viewBox="0 0 512 512" aria-hidden="true">
+              <path fill="currentColor" d="M505 273c9.4-9.4 9.4-24.6 0-33.9L361 95c-6.9-6.9-17.2-8.9-26.2-5.2S320 102.3 320 112l0 80-112 0c-26.5 0-48 21.5-48 48l0 32c0 26.5 21.5 48 48 48l112 0 0 80c0 9.7 5.8 18.5 14.8 22.2s19.3 1.7 26.2-5.2L505 273zM160 96c17.7 0 32-14.3 32-32s-14.3-32-32-32L96 32C43 32 0 75 0 128L0 384c0 53 43 96 96 96l64 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-64 0c-17.7 0-32-14.3-32-32l0-256c0-17.7 14.3-32 32-32l64 0z"></path>
+            </svg>
+            Sign Out
+          </button>
+        </div>
+      </div>
+        }@else {
+          <a 
+        routerLink="/login" routerLinkActive="text-primary"
+          class="flex items-center gap-2 font-medium text-gray-700 transition-colors hover:text-emerald-600"
+        >
+          <i class="far fa-user text-lg"></i> Sign In
+        </a>
+        <a 
+        routerLink="/register" routerLinkActive="text-primary"
+          class="flex items-center gap-2 font-medium text-gray-700 transition-colors hover:text-emerald-600"
+        >
+          <i class="fas fa-user-plus text-lg"></i> Sign Up
+        </a>
+        
+        }
+
+      </div>
+
+      <!-- dropdown when login -->
+
+      <!-- bars button  -->
+      <button
+        type="button"
+        data-drawer-target="drawer-right"
+        data-drawer-show="drawer-right"
+        data-drawer-placement="right"
+        class="p-2 text-gray-600 hover:text-emerald-600 md:hidden focus:outline-none transition-colors"
+      >
+        <i class="fas fa-bars text-2xl"></i>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- --------------- navbar responsive ---------------- -->
+
+<div
+  id="drawer-right"
+  class="fixed top-0 right-0 z-50 h-screen w-80 translate-x-full overflow-y-auto bg-white p-6 shadow-2xl transition-transform"
+  tabindex="-1"
+>
+  <!-- logo  -->
+  <div class="mb-8 flex items-center justify-between">
+    <img
+      src="https://freshcart.codescandy.com/assets/images/logo/freshcart-logo.svg"
+      alt="Logo"
+      class="h-7"
+    />
+    <button
+      type="button"
+      data-drawer-hide="drawer-right"
+      class="rounded-full bg-gray-100 p-2 text-gray-400 hover:bg-gray-200"
+    >
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+
+  <!-- search  -->
+  <div class="relative mb-8">
+    <input
+      type="text"
+      placeholder="Search products..."
+      class="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm outline-none focus:border-emerald-500 focus:ring-emerald-500"
+    />
+    <button class="absolute right-3 top-2.5 text-emerald-600"><i class="fas fa-search"></i></button>
+  </div>
+
+  <!-- links  -->
+  <nav class="mb-1 border-b border-gray-100 pb-2">
+    <ul class="space-y-5 font-medium text-gray-800">
+      <li><a routerLink="/home" routerLinkActive="" class="block transition-colors hover:text-emerald-600">Home</a></li>
+      <li><a routerLink="/shop" routerLinkActive="" class="block transition-colors hover:text-emerald-600">Shop</a></li>
+      <li><a routerLink="/Categories" routerLinkActive="" class="block transition-colors hover:text-emerald-600">Categories</a></li>
+    </ul>
+  </nav>
+
+  <div class="mb-2 space-y-2">
+    <a
+      routerLink="/Wishlist" routerLinkActive="text-primary"
+      class="group flex cursor-pointer items-center gap-1 rounded-xl p-1 transition-colors hover:bg-gray-50"
+    >
+      <div class="flex h-11 w-11 items-center justify-center rounded-full bg-red-50 text-red-500">
+        <i class="far fa-heart text-lg"></i>
+      </div>
+      <span class="font-medium text-gray-700 group-hover:text-red-600">Wishlist</span>
+    </a>
+    <a
+    routerLink="/cart" routerLinkActive="text-primary"
+      class="group flex cursor-pointer items-center gap-1 rounded-xl p-1 transition-colors hover:bg-gray-50"
+    >
+      <div
+        class="flex h-11 w-11 items-center justify-center rounded-full bg-emerald-50 text-emerald-600"
+      >
+        <i class="fas fa-shopping-cart text-lg"></i>
+      </div>
+      <span class="font-medium text-gray-700 group-hover:text-emerald-600">My Cart</span>
+    </a>
+  </div>
+
+  <div class="space-y-2 border-t border-gray-100 pt-2">
+    <a
+    routerLink="/login" routerLinkActive="text-primary"
+      class="group flex cursor-pointer items-center gap-1 rounded-xl p-1 transition-colors hover:bg-emerald-50"
+    >
+      <div
+        class="flex h-11 w-11 items-center justify-center rounded-full bg-gray-100 text-gray-600 transition-colors group-hover:bg-emerald-100 group-hover:text-emerald-600"
+      >
+        <i class="far fa-user text-lg"></i>
+      </div>
+      <span class="font-bold text-gray-700 group-hover:text-emerald-600">Sign In</span>
+    </a>
+
+    <a
+    routerLink="/register" routerLinkActive="text-primary"
+      class="group flex cursor-pointer items-center gap-1 rounded-xl p-1 transition-colors hover:bg-emerald-50"
+    >
+      <div
+        class="flex h-11 w-11 items-center justify-center rounded-full bg-gray-100 text-gray-600 transition-colors group-hover:bg-emerald-100 group-hover:text-emerald-600"
+      >
+        <i class="fas fa-user-plus text-lg"></i>
+      </div>
+      <span class="font-bold text-gray-700 group-hover:text-emerald-600">Sign Up</span>
+    </a>
+  </div>
+</div>

@@ -1,0 +1,54 @@
+server:
+  port: 8083
+
+spring:
+  application:
+    name: cart-service
+
+  # ─── MySQL DataSource ─────────────────────────────────────────────────────
+  datasource:
+    url: jdbc:mysql://localhost:3306/carts_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:0000}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  # ─── JPA / Hibernate ──────────────────────────────────────────────────────
+  jpa:
+    hibernate:
+      ddl-auto: update          # use 'validate' in production with Flyway/Liquibase
+    show-sql: true
+
+
+# ─── JWT ──────────────────────────────────────────────────────────────────────
+jwt:
+  secret: ${JWT_SECRET:E-commerceFreshCart-WebSite-SecretKey}
+  expiration: 600000 # 10 minutes in milliseconds
+
+# ─── Eureka Service Discovery ─────────────────────────────────────────────────
+eureka:
+  client:
+    enabled: true # Set to true if using Eureka for service discovery
+    service-url:
+      defaultZone: http://${EUREKA_HOST:localhost}:${EUREKA_PORT:8761}/eureka/
+    fetch-registry: true
+    register-with-eureka: true
+  instance:
+    prefer-ip-address: true
+
+
+# ─── Inter-Service URLs ───────────────────────────────────────────────────────
+# These are used by WebClient to call ProductService and OrderService.
+# In a Eureka setup the service names are resolved automatically;
+# override with full URLs if you run without a discovery server.
+services:
+  product-service:
+    url: ${PRODUCT_SERVICE_URL:http://PRODUCT-SERVICE}   # Eureka name or full URL
+  order-service:
+    url: ${ORDER_SERVICE_URL:http://order-service}       # Eureka name or full URL
+
+# ─── Logging ──────────────────────────────────────────────────────────────────
+logging:
+  level:
+    com.ecommerce.cartservice: DEBUG
+    org.springframework.security: INFO
+    org.hibernate.SQL: DEBUG

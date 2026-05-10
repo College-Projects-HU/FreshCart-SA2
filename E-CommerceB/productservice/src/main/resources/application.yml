@@ -1,0 +1,39 @@
+server:
+  port: 8082
+spring:
+  application:
+    name: product-service
+  mongodb:
+    #for local testing, use the following URI
+    # uri: ${MONGODB_URI:mongodb://localhost:27017/productservice}
+    #for production, use the following URI (replace with your actual MongoDB Atlas URI)
+    uri: ${MONGODB_URI:mongodb://localhost:27017/productservice}
+
+  web:
+    error:
+      include-message: always
+      include-stacktrace: on_param
+      include-binding-errors: always
+eureka:
+  client:
+    enabled: true # Set to true if using Eureka for service discovery
+    service-url:
+      defaultZone: http://${EUREKA_HOST:localhost}:${EUREKA_PORT:8761}/eureka/
+    fetch-registry: true
+    register-with-eureka: true
+  instance:
+    prefer-ip-address: true
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+jwt:
+  secret: E-commerceFreshCart-WebSite-SecretKey
+  expiration: 600000 # 10 minutes
+  server:
+  port: 8082
+

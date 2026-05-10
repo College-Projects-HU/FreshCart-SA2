@@ -1,0 +1,15 @@
+<section class="py-10">
+    <div class="container">
+         <h2 class="text-3xl font-semibold">Shop By <span class="text-primary">Category</span></h2>
+         <div class="mt-6 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
+            @for (category of categoriesList(); track category._id ) {
+                <div class="shadow rounded  p-7 flex text-center flex-col items-center">
+                <img [src]="category.image" class="size-20 rounded-full" [alt]="category.name">
+                <h3 class="font-medium mt-3">{{category.name}}</h3>
+            </div>
+            }
+            
+         </div>
+         <app-two-static/>
+    </div>
+</section>

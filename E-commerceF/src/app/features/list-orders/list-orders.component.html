@@ -1,0 +1,260 @@
+
+<!-- ════════════════════════════════════════════════
+     ORDERS PAGE — matches dashboard aesthetic (Tailwind)
+════════════════════════════════════════════════ -->
+
+<div class="space-y-6">
+
+  <!-- ── Breadcrumb + Heading ── -->
+  <div class="mb-8">
+    <nav class="flex items-center gap-1.5 text-sm text-slate-400 mb-2">
+      <a routerLink="/content" class="cursor-pointer hover:text-sky-600 transition-colors">Dashboard</a>
+      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+      </svg>
+      <span class="text-slate-700 font-medium">Orders</span>
+    </nav>
+    <div class="flex items-center justify-between flex-wrap gap-4">
+      <div>
+        <h2 class="text-2xl font-bold text-slate-800">All Orders</h2>
+        <p class="text-slate-500 text-sm mt-1">Monitor and manage customer orders.</p>
+      </div>
+      <div class="flex items-center gap-3 flex-wrap">
+        <!-- Orders count pill -->
+        <div class="flex items-center gap-2 bg-sky-50 border border-sky-100 text-sky-700 text-sm font-medium px-4 py-2 rounded-xl">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+          </svg>
+          <span>
+            {{ orderList().length }} 
+            Orders</span>
+        </div>
+        <!-- Unpaid pill -->
+        <div class="flex items-center gap-2 bg-red-50 border border-red-100 text-red-600 text-sm font-medium px-4 py-2 rounded-xl">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+          <span>
+            <!-- {{ unpaidCount() }}  -->
+            Unpaid</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Summary Cards ── -->
+  
+
+  <!-- ── Orders Table Card ── -->
+  <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+
+    <!-- Card Header -->
+    <div class="px-6 py-4 border-b border-slate-100 flex items-center gap-3">
+      <div class="w-1 h-5 bg-sky-500 rounded-full"></div>
+      <h3 class="text-base font-semibold text-slate-700">Orders List</h3>
+    </div>
+
+    <!-- Search + Filter bar -->
+    <div class="px-6 py-4 border-b border-slate-50 flex flex-col sm:flex-row gap-3">
+      <div class="relative flex-1">
+        <svg class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0"/>
+        </svg>
+        <input
+          type="text"
+          (input)="onSearch($event)"
+          placeholder="Search by customer or city…"
+          class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-sm text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-300 focus:border-sky-400 transition"
+        />
+      </div>
+      <div class="relative">
+        <select (change)="onPaymentFilter($event)" class="pl-4 pr-9 py-2.5 rounded-xl border border-slate-200 text-sm text-slate-700 bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-sky-300 focus:border-sky-400 transition cursor-pointer">
+          <option value="">All payment types</option>
+          <option value="cash">Cash</option>
+          <option value="card">Card</option>
+        </select>
+        <svg class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm table-fixed">
+
+        <!-- Head -->
+        <thead>
+          <tr class="bg-slate-50/70 text-left">
+            <th class="w-[6%]  px-3 py-3.5 text-xs font-semibold text-slate-500 uppercase tracking-wider">#</th>
+            <th class="w-[18%] px-3 py-3.5 text-xs font-semibold text-slate-500 uppercase tracking-wider">Customer</th>
+            <th class="w-[10%] px-3 py-3.5 text-xs font-semibold text-slate-500 uppercase tracking-wider">Items</th>
+            <th class="w-[12%] px-3 py-3.5 text-xs font-semibold text-slate-500 uppercase tracking-wider">Total</th>
+            <th class="w-[11%] px-3 py-3.5 text-xs font-semibold text-slate-500 uppercase tracking-wider">Payment</th>
+            <th class="w-[10%] px-3 py-3.5 text-xs font-semibold text-slate-500 uppercase tracking-wider">Paid</th>
+            <th class="w-[10%] px-3 py-3.5 text-xs font-semibold text-slate-500 uppercase tracking-wider">Delivered</th>
+            <th class="w-[10%] px-3 py-3.5 text-xs font-semibold text-slate-500 uppercase tracking-wider">City</th>
+            <th class="w-[13%] px-3 py-3.5 text-xs font-semibold text-slate-500 uppercase tracking-wider">Date</th>
+          </tr>
+        </thead>
+
+        <!-- Body -->
+        <tbody class="divide-y divide-slate-100">
+
+          @for (order of filteredOrders(); track order._id) {
+            <tr class="hover:bg-slate-50/60 transition-colors group">
+
+              <!-- Order ID -->
+              <td class="px-3 py-3">
+                <span class="font-mono text-xs text-slate-400 bg-slate-100 px-2 py-1 rounded-lg">
+                  {{order.id}}
+                </span>
+              </td>
+
+              <!-- Customer -->
+              <td class="px-3 py-3">
+                <div class="flex items-center gap-2">
+                  <!-- Avatar initials -->
+                  <div class="w-8 h-8 rounded-full bg-sky-100 flex items-center justify-center text-sky-700 text-xs font-semibold shrink-0">
+                    {{ getInitials(order.user.name) }}
+                  </div>
+                  
+                  <span class="font-semibold text-slate-800 truncate text-xs">
+                    {{ order.user.name }}
+                  </span>
+                </div>
+              </td>
+
+              <!-- Items count -->
+              <td class="px-3 py-3">
+                <div class="flex items-center gap-1.5">
+                  <svg class="w-3.5 h-3.5 text-slate-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10"/>
+                  </svg>
+                  <span class="text-slate-700 tabular-nums">
+                    {{ order.cartItems.length }}
+                </span>
+                </div>
+              </td>
+
+              <!-- Total Price -->
+              <td class="px-3 py-3">
+                <span class="font-bold text-slate-800 tabular-nums">
+                    {{ order.totalOrderPrice }}
+                </span>
+                <span class="text-xs text-slate-400 ml-1">EGP</span>
+              </td>
+
+              <!-- Payment Method -->
+              <td class="px-3 py-3">
+                <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-100 text-slate-600 capitalize">
+                  {{ order.paymentMethodType }}
+                </span>
+              </td>
+
+              <!-- Is Paid -->
+              <td class="px-3 py-3">
+                @if (order.isPaid) {
+                  <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-100">
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+                    </svg>
+                    Paid
+                  </span>
+                } @else {
+                  <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-red-50 text-red-500 border border-red-100">
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                    Unpaid
+                  </span>
+                }
+              </td>
+
+              <!-- Is Delivered -->
+              <td class="px-3 py-3">
+                @if (order.isDelivered) {
+                  <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-100">
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+                    </svg>
+                    Done
+                  </span>
+                } @else {
+                  <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-amber-50 text-amber-600 border border-amber-100">
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    Pending
+                  </span>
+                }
+              </td>
+
+              <!-- City -->
+              <td class="px-3 py-3">
+                <div class="flex items-center gap-1 text-slate-500 text-xs">
+                  <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                  </svg>
+                  {{ order.shippingAddress.city }}
+                </div>
+              </td>
+
+              <!-- Date -->
+              <td class="px-3 py-3">
+                <div class="flex flex-col gap-0.5">
+                  <span class="text-slate-700 font-medium text-xs">
+                    {{ formatDateToShort(order.createdAt) }}
+                </span>
+                  <span class="text-xs text-slate-400">
+                    {{ formatTime(order.createdAt) }}
+                </span>
+                </div>
+              </td>
+
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="9">
+                <div class="py-16 flex flex-col items-center justify-center text-center gap-3">
+                  <div class="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center">
+                    <svg class="w-8 h-8 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+                    </svg>
+                  </div>
+                  <p class="text-slate-600 font-semibold">No orders found</p>
+                  <p class="text-slate-400 text-sm">No orders have been placed yet.</p>
+                </div>
+              </td>
+            </tr>
+          }
+
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination footer -->
+    <div class="px-6 py-4 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-slate-500">
+      <span>Showing <strong class="text-slate-700">
+        1–{{ orderList().length }}
+    </strong> of <strong class="text-slate-700">
+        {{ orderList().length }}
+    </strong> orders</span>
+      <div class="flex items-center gap-1">
+        <button class="w-8 h-8 rounded-lg border border-slate-200 hover:bg-slate-100 flex items-center justify-center transition disabled:opacity-40" disabled>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+          </svg>
+        </button>
+        <button class="w-8 h-8 rounded-lg bg-green-600 text-white text-xs font-semibold flex items-center justify-center shadow-sm shadow-green-200">1</button>
+        <button class="w-8 h-8 rounded-lg border border-slate-200 hover:bg-slate-100 flex items-center justify-center transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>

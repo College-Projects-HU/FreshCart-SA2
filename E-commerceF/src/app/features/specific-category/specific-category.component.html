@@ -1,0 +1,77 @@
+<div class="min-h-screen bg-white">
+
+    @if (!isLoading() && specificSubDetails()) {
+
+    <div class="bg-linear-to-br from-emerald-600 via-emerald-500 to-emerald-400 text-white">
+        <div class="container mx-auto px-4 py-10 sm:py-14">
+
+            <nav class="flex items-center gap-2 text-sm text-white/70 mb-6 flex-wrap">
+                <a routerLink="/" class="hover:text-white transition-colors">Home</a>
+                <span class="text-white/40">/</span>
+                <a routerLink="/categories" class="hover:text-white transition-colors">Categories</a>
+                <span class="text-white/40">/</span>
+                <span class="text-white font-medium">{{ specificSubDetails().name }}</span>
+            </nav>
+
+            <div class="flex items-center gap-5">
+                <div
+                    class="w-16 h-16 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center shadow-xl ring-1 ring-white/30">
+                    <i class="fas fa-folder-open text-3xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-3xl sm:text-4xl font-bold tracking-tight">
+                        {{ specificSubDetails().name }}
+                    </h1>
+                    <p class="text-white/80 mt-1">Browse {{ specificSubDetails().name }} products</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mx-auto px-4 py-8 bg-white">
+
+        <div class="mb-6 flex items-center gap-3 flex-wrap">
+            <span class="flex items-center gap-2 text-sm text-gray-600">
+                <i class="fas fa-filter"></i> Active Filters:
+            </span>
+            <a routerLink="/products"
+                class="cursor-pointer inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-100 text-emerald-700 text-sm font-medium hover:bg-emerald-200 transition-colors">
+                <i class="fas fa-folder-open text-xs"></i>
+                {{ specificSubDetails().name }}
+                <i class="fas fa-xmark text-xs"></i>
+            </a>
+            <a routerLink="/products" class="text-sm text-gray-500 hover:text-gray-700 underline cursor-pointer">
+                Clear all
+            </a>
+        </div>
+
+        <div class="mb-6 text-sm text-gray-500 font-medium">
+            Showing {{ productsList().length }} products
+        </div>
+
+        @if (productsList().length > 0) {
+        } @else {
+        <div class="text-center py-20 bg-white">
+            <div class="w-20 h-20 rounded-full bg-gray-50 flex items-center justify-center mx-auto mb-5">
+                <i class="fas fa-box-open text-3xl text-gray-300"></i>
+            </div>
+            <h3 class="text-lg font-bold text-gray-900 mb-2">No Products Found</h3>
+            <p class="text-gray-500 mb-6 max-w-sm mx-auto">
+                No products match your current filters in <span class="font-bold">{{ specificSubDetails().name
+                    }}</span>.
+            </p>
+            <a routerLink="/products"
+                class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-emerald-600 text-white font-semibold hover:bg-emerald-700 transition-colors cursor-pointer">
+                View All Products
+            </a>
+        </div>
+        }
+    </div>
+
+    } @else if (isLoading()) {
+    <div class="flex justify-center items-center py-40">
+        <i class="fas fa-circle-notch fa-spin text-4xl text-emerald-500"></i>
+    </div>
+    }
+
+</div>

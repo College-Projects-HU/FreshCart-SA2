@@ -1,0 +1,281 @@
+<!-- ════════════════════════════════════════════════
+     PRODUCTS PAGE — matches dashboard aesthetic
+════════════════════════════════════════════════ -->
+
+<div class=" space-y-6">
+
+  <!-- ── Breadcrumb + Heading ── -->
+  <div class="mb-8">
+    <nav class="flex items-center gap-1.5 text-sm text-slate-400 mb-2">
+      <a routerLink="/content" class="cursor-pointer hover:text-sky-600 transition-colors">Dashboard</a>
+      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+      </svg>
+      <span class="text-slate-700 font-medium">Products</span>
+    </nav>
+    <div class="flex items-center justify-between flex-wrap gap-4">
+      <div>
+        <h2 class="text-2xl font-bold text-slate-800">All Products</h2>
+        <p class="text-slate-500 text-sm mt-1">Manage your store products, pricing and inventory.</p>
+      </div>
+      <div class="flex items-center gap-3 flex-wrap">
+        <!-- Stats pill -->
+        <div class="flex items-center gap-2 bg-sky-50 border border-sky-100 text-sky-700 text-sm font-medium px-4 py-2 rounded-xl">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10"/>
+          </svg>
+          <span> {{productList().length}} Products</span>
+        </div>
+        <!-- Add Product -->
+        <a routerLink="/addproduct"
+          class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-green-600 hover:bg-green-700 text-white text-sm font-semibold shadow-md shadow-sky-200 transition-all duration-150 active:scale-95">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+          </svg>
+          Add Product
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Products Table Card ── -->
+  <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+
+    <!-- Card Header -->
+    <div class="px-6 py-4 border-b border-slate-100 flex items-center gap-3">
+      <div class="w-1 h-5 bg-sky-500 rounded-full"></div>
+      <h3 class="text-base font-semibold text-slate-700">Products List</h3>
+    </div>
+
+    <!-- Search + Filter bar -->
+    <div class="px-6 py-4 border-b border-slate-50 flex flex-col sm:flex-row gap-3">
+      <div class="relative flex-1">
+        <svg class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0"/>
+        </svg>
+        <input
+          type="text"
+          (input)="onSearch($event)"
+          placeholder="Search by title, brand or category…"
+          class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-sm text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-300 focus:border-sky-400 transition"
+        />
+      </div>
+      <div class="relative">
+        <select (change)="onCategoryFilter($event)" class="pl-4 pr-9 py-2.5 rounded-xl border border-slate-200 text-sm text-slate-700 bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-sky-300 focus:border-sky-400 transition cursor-pointer">
+          <option value="">All Categories</option>
+          @for (cat of categoriesList(); track cat._id) {
+            <option [value]="cat._id">{{ cat.name }}</option>
+         }
+        </select>
+        <svg class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div>
+      <table class="w-full text-sm table-fixed">
+
+        <!-- Head -->
+        <thead>
+          <tr class="bg-slate-50/70 text-left">
+            <th class="w-[5%]  px-3 py-3.5 text-xs font-semibold text-slate-500 uppercase tracking-wider">Img</th>
+            <th class="w-[16%] px-3 py-3.5 text-xs font-semibold text-slate-500 uppercase tracking-wider">Title</th>
+            <th class="w-[9%]  px-3 py-3.5 text-xs font-semibold text-slate-500 uppercase tracking-wider">ID</th>
+            <th class="w-[10%] px-3 py-3.5 text-xs font-semibold text-slate-500 uppercase tracking-wider">Category</th>
+            <th class="w-[9%]  px-3 py-3.5 text-xs font-semibold text-slate-500 uppercase tracking-wider">Brand</th>
+            <th class="w-[8%]  px-3 py-3.5 text-xs font-semibold text-slate-500 uppercase tracking-wider">Price</th>
+            <th class="w-[7%]  px-3 py-3.5 text-xs font-semibold text-slate-500 uppercase tracking-wider">Qty</th>
+            <th class="w-[7%]  px-3 py-3.5 text-xs font-semibold text-slate-500 uppercase tracking-wider">Sold</th>
+            <th class="w-[11%] px-3 py-3.5 text-xs font-semibold text-slate-500 uppercase tracking-wider">Created</th>
+            <th class="w-[18%] px-3 py-3.5 text-xs font-semibold text-slate-500 uppercase tracking-wider text-center">Actions</th>
+          </tr>
+        </thead>
+
+        <!-- Body — ONE example row, use @for (product of products; track product._id) -->
+        <tbody class="divide-y divide-slate-100">
+
+          <!-- ↓↓↓ EXAMPLE ROW ↓↓↓ -->
+          @for (product of filteredProducts(); track product.id) {
+            <tr class="hover:bg-slate-50/60 transition-colors group">
+
+            <!-- Image -->
+            <td class="px-3 py-3">
+              <div class="w-11 h-11 rounded-xl overflow-hidden border border-slate-100 bg-slate-50 shadow-sm shrink-0">
+                <img
+                  [src]="product.imageCover"
+                  [alt]="product.title"
+                  class="w-full h-full object-cover"
+                  onerror="this.src='https://via.placeholder.com/44x44?text=?'"
+                />
+                <!-- placeholder if no image -->
+                <!-- <div class="w-full h-full flex items-center justify-center">
+                  <svg class="w-5 h-5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                  </svg>
+                </div> -->
+              </div>
+            </td>
+
+            <!-- Title -->
+            <td class="px-3 py-3">
+              <p class="font-semibold text-slate-800 truncate leading-tight">
+                <!-- {{ product.title }} -->
+                {{product.title}}
+              </p>
+              <!-- Slug -->
+              <p class="text-xs text-slate-400 font-mono truncate mt-0.5">
+                <!-- {{ product.slug }} -->
+                {{product.slug}}
+              </p>
+            </td>
+
+            <!-- ID -->
+            <td class="px-3 py-3">
+              <span class="font-mono text-xs text-slate-400 bg-slate-100 px-2 py-1 rounded-lg truncate block">
+                <!-- {{ product._id | slice:0:8 }}… -->
+                {{product.id}}
+              </span>
+            </td>
+
+            <!-- Category -->
+            <td class="px-3 py-3">
+              <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-semibold bg-sky-50 text-sky-700 border border-sky-100 truncate max-w-full">
+                <!-- {{ product.category?.name }} -->
+                {{product.category.name}}
+              </span>
+            </td>
+
+            <!-- Brand -->
+            <td class="px-3 py-3">
+              <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-100 text-slate-600 truncate max-w-full">
+                <!-- {{ product.brand?.name ?? '—' }} -->
+                {{product.brand.name}}
+              </span>
+            </td>
+
+            <!-- Price -->
+            <td class="px-3 py-3">
+              <span class="font-bold text-slate-800 tabular-nums">
+                <!-- ${{ product.price | number:'1.0-2' }} -->
+                {{product.price}}
+              </span>
+            </td>
+
+            <!-- Quantity -->
+            <td class="px-3 py-3">
+              <!-- In stock badge -->
+              <span class="inline-flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-100 tabular-nums">
+                <!-- {{ product.quantity }} -->
+                {{product.quantity}}
+              </span>
+              <!-- Out of stock: use @if product.quantity === 0 -->
+              <!--
+              <span class="inline-flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-semibold bg-red-50 text-red-600 border border-red-100">
+                Out
+              </span>
+              -->
+            </td>
+
+            <!-- Sold -->
+            <td class="px-3 py-3">
+              <div class="flex items-center gap-1.5">
+                <svg class="w-3.5 h-3.5 text-slate-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                </svg>
+                <span class="font-medium text-slate-700 tabular-nums">
+                  <!-- {{ product.sold }} -->
+                  {{product.sold}}
+                </span>
+              </div>
+            </td>
+
+            <!-- Created At -->
+            <td class="px-3 py-3">
+              <div class="flex flex-col gap-0.5">
+                <span class="text-slate-700 font-medium text-xs">
+                  <!-- {{ product.createdAt | date:'MMM d, y' }} -->
+                  {{formatDateToShort(product.createdAt)}}
+                </span>
+                <span class="text-xs text-slate-400">
+                  <!-- {{ product.createdAt | date:'h:mm a' }} -->
+                  {{formatTime(product.createdAt)}}
+                </span>
+              </div>
+            </td>
+
+            <!-- Actions -->
+            <td class="px-3 py-3">
+              <div class="flex items-center justify-center gap-1.5">
+
+                <!-- Edit -->
+                <button
+                  type="button"
+                  
+                  class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-sky-50 hover:bg-sky-500 border border-sky-200 hover:border-sky-500 text-sky-600 hover:text-white text-xs font-semibold transition-all duration-200 active:scale-95"
+                >
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                  </svg>
+                  Edit
+                </button>
+
+                <!-- Delete -->
+                <button
+                  type="button"
+                  (click)="deleteProduct(product.id)"
+                  class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-red-50 hover:bg-red-500 border border-red-200 hover:border-red-500 text-red-500 hover:text-white text-xs font-semibold transition-all duration-200 active:scale-95"
+                >
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                  </svg>
+                  Delete
+                </button>
+
+                
+
+              </div>
+            </td>
+
+          </tr>
+          }@empty {
+              <div *ngIf="products.length === 0" class="py-16 flex flex-col items-center justify-center text-center gap-3">
+      <div class="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center">
+        <svg class="w-8 h-8 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10"/>
+        </svg>
+      </div>
+      <p class="text-slate-600 font-semibold">No products found</p>
+      <p class="text-slate-400 text-sm">Try adjusting your search or add a new product.</p>
+    </div>
+          }
+          <!-- ↑↑↑ END EXAMPLE ROW ↑↑↑ -->
+
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Empty state -->
+    
+
+    <!-- Pagination footer -->
+    <div class="px-6 py-4 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-slate-500">
+      <span>Showing <strong class="text-slate-700">1–{{ filteredProducts().length }}</strong> of <strong class="text-slate-700"></strong> {{ filteredProducts().length }} products</span>
+      <div class="flex items-center gap-1">
+        <button class="w-8 h-8 rounded-lg border border-slate-200 hover:bg-slate-100 flex items-center justify-center transition disabled:opacity-40" disabled>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+          </svg>
+        </button>
+        <button class="w-8 h-8 rounded-lg bg-green-600 text-white text-xs font-semibold flex items-center justify-center shadow-sm shadow-green-200">1</button>
+        <button class="w-8 h-8 rounded-lg border border-slate-200 hover:bg-slate-100 flex items-center justify-center transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>

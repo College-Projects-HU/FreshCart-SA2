@@ -1,0 +1,105 @@
+<div class="bg-gradient-to-br from-primary via-primary to-primary text-white">
+    <div class="container mx-auto px-4 py-10 sm:py-14">
+        <nav class="flex items-center gap-2 text-sm text-white/70 mb-6 flex-wrap">
+            <a class="hover:text-white transition-colors" routerLink="/home">Home</a>
+            <span class="text-white/40">/</span>
+            <a class="hover:text-white transition-colors" routerLink="/brands">Brands</a>
+            <span class="text-white/40">/</span><span class="text-white font-medium">{{brandDetails().name}}</span>
+        </nav>
+        <div class="flex items-center gap-5">
+            <div class="w-16 h-16 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center shadow-xl ring-1 ring-white/30">
+                <img alt="DeFacto" class="w-10 h-10 object-contain" [src]="brandDetails().image">
+            </div>
+            <div>
+                <h1 class="text-3xl sm:text-4xl font-bold tracking-tight">{{brandDetails().name}}</h1>
+                <p class="text-white/80 mt-1">Shop {{brandDetails().name}} products</p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container mx-auto px-4 py-8">
+    <div class="mb-6 flex items-center gap-3 flex-wrap">
+        <span class="flex items-center gap-2 text-sm text-gray-600">
+            <i class="fa-solid fa-filter "></i>Active Filters:
+        </span>
+        <a class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-violet-100 text-violet-700 text-sm font-medium hover:bg-violet-200 transition-colors" href="/products">
+            <svg data-prefix="fas" data-icon="tags" class="svg-inline--fa fa-tags text-xs" role="img" viewBox="0 0 576 512" aria-hidden="true">
+                <path fill="currentColor" d="M401.2 39.1L549.4 189.4c27.7 28.1 27.7 73.1 0 101.2L393 448.9c-9.3 9.4-24.5 9.5-33.9 .2s-9.5-24.5-.2-33.9L515.3 256.8c9.2-9.3 9.2-24.4 0-33.7L367 72.9c-9.3-9.4-9.2-24.6 .2-33.9s24.6-9.2 33.9 .2zM32.1 229.5L32.1 96c0-35.3 28.7-64 64-64l133.5 0c17 0 33.3 6.7 45.3 18.7l144 144c25 25 25 65.5 0 90.5L285.4 418.7c-25 25-65.5 25-90.5 0l-144-144c-12-12-18.7-28.3-18.7-45.3zm144-85.5a32 32 0 1 0 -64 0 32 32 0 1 0 64 0z"></path>
+            </svg>
+            {{brandDetails().name}}
+            <svg data-prefix="fas" data-icon="xmark" class="svg-inline--fa fa-xmark text-xs" role="img" viewBox="0 0 384 512" aria-hidden="true">
+                <path fill="currentColor" d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"></path>
+            </svg>
+        </a>
+        <a class="text-sm text-gray-500 hover:text-gray-700 underline" routerLink="/shop">Clear all</a>
+    </div>
+    
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6">
+    @for (product of productList(); track product.id) {
+        
+        <div id="product-card" class="bg-white border border-gray-200 rounded-md overflow-hidden
+            transition-all duration-300
+            hover:shadow-[0px_10px_15px_-3px_rgba(0,0,0,0.1),0px_4px_6px_-4px_rgba(0,0,0,0.1)]
+            hover:-translate-y-[5px]" >
+            <div class="relative">
+                <img class="w-full h-60 object-contain bg-white" alt="Woman Shawl" [src]="product.imageCover">
+                    <div class="absolute top-3 right-3 flex flex-col space-y-2">
+                        <button  (click)="addToWishlist(product.id)"
+                         [style.color]="wishlistIds().includes(product.id) ? 'red' : 'gray'" class="transition-all duration-300 hover:text-primary bg-white h-8 w-8 rounded-full flex items-center justify-center cursor-pointer transition shadow-sm text-gray-600 hover:text-red-500" title="Add to wishlist" tabindex="0">
+                            <i class="fa-regular fa-heart" [class.fas]="wishlistIds().includes(product.id)"
+                            [class.far]="!wishlistIds().includes(product.id)"></i>
+                        </button>
+                        <button class="transition-all duration-300 hover:text-primary bg-white h-8 w-8 rounded-full flex items-center cursor-pointer justify-center text-gray-600 hover:text-primary-600 shadow-sm">
+                            <i class="fa-solid fa-arrows-rotate"></i>
+                        </button>
+                        <a [routerLink]="['/details' , product.id , product.slug]" class="transition-all duration-300 hover:text-primary bg-white h-8 w-8 rounded-full flex items-center cursor-pointer justify-center text-gray-600 hover:text-primary-600 shadow-sm" href="/products/6428ebc6dc1175abc65ca0b9">
+                            <i class="fa-regular fa-eye"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="p-4">
+                    <div class="text-xs text-gray-500 mb-1">{{product.category.name}}</div>
+                    <h3 class="font-medium mb-1 cursor-pointer " title="Woman Shawl">
+                        <a class="line-clamp-2" href="/products/6428ebc6dc1175abc65ca0b9">{{product.title}}</a>
+                    </h3>
+                    <div class="flex items-center mb-2">
+                        <div class="flex text-amber-400 mr-2">
+                            <div class="text-yellow-400">
+                                <i class="fa-solid fa-star text-yellow-400"></i>
+                                <i class="fa-solid fa-star text-yellow-400"></i>
+                                <i class="fa-solid fa-star text-yellow-400"></i>
+                                <i class="fa-solid fa-star text-yellow-400"></i>
+                                <i class="fa-solid fa-star-half-stroke text-yellow-400"></i>
+                            </div>
+                        </div>
+                        <span class="text-xs text-gray-500">{{product.ratingsAverage}} ({{product.ratingsQuantity}})</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <span class="text-lg font-bold text-gray-800">{{product.price}} EGP</span>
+                        </div>
+                        <button (click)="addToCart(product.id)" class="transition-all duration-300 hover:bg-green-700 h-10 w-10 rounded-full flex items-center justify-center cursor-pointer transition bg-primary text-white hover:bg-primary-700 disabled:opacity-70" tabindex="0">
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+        </div>
+    
+    }@empty {
+        
+        <div class="text-center  py-20">
+            <div class="w-20 h-20 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-5">
+                <svg data-prefix="fas" data-icon="box-open" class="svg-inline--fa fa-box-open text-3xl text-gray-400" role="img" viewBox="0 0 640 512" aria-hidden="true">
+                    <path fill="currentColor" d="M560.3 237.2c10.4 11.8 28.3 14.4 41.8 5.5 14.7-9.8 18.7-29.7 8.9-44.4l-48-72c-2.8-4.2-6.6-7.7-11.1-10.2L351.4 4.7c-19.3-10.7-42.8-10.7-62.2 0L88.8 116c-5.4 3-9.7 7.4-12.6 12.8L27.7 218.7c-12.6 23.4-3.8 52.5 19.6 65.1l33 17.7 0 53.3c0 23 12.4 44.3 32.4 55.7l176 99.7c19.6 11.1 43.5 11.1 63.1 0l176-99.7c20.1-11.4 32.4-32.6 32.4-55.7l0-117.5zm-240-9.8L170.2 144 320.3 60.6 470.4 144 320.3 227.4zm-41.5 50.2l-21.3 46.2-165.8-88.8 25.4-47.2 161.7 89.8z"></path>
+                </svg>
+            </div>
+            <h3 class="text-lg font-bold text-gray-900 mb-2">No Products Found</h3>
+            <p class="text-gray-500 mb-6">No products match your current filters.</p>
+            <a class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary text-white font-semibold hover:bg-primary-700 transition-colors" routerLink="/shop">
+                View All Products
+            </a>
+        </div>
+        
+    }
+    </div>
+</div>
