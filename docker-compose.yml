@@ -145,6 +145,8 @@ services:
       SPRING_DATASOURCE_PASSWORD: root
       EUREKA_HOST: eureka-server
       EUREKA_PORT: 8761
+      STRIPE_SECRET_KEY: sk_test_dummy
+      STRIPE_WEBHOOK_SECRET: whsec_dummy
 
   wishlist-service:
     build: ./E-CommerceB/wishlistservice
@@ -163,7 +165,7 @@ services:
 
   # ── Frontend ────────────────────────
   frontend:
-    build: ./E-CommerceF
+    build: ./E-commerceF
     ports: ["4000:4000"]
     depends_on: [api-gateway]
     environment:

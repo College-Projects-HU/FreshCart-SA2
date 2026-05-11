@@ -43,11 +43,10 @@ export class NavbarComponent implements OnInit {
       }
     }
 
-    this.getCartCount();
-
     const freshToken = localStorage.getItem('freshToken');
     if (freshToken) {
       this.authService.isLogged.set(true);
+      this.getCartCount();
     }
   }
 
