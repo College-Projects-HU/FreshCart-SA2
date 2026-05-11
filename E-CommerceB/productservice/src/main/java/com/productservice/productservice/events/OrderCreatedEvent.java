@@ -1,4 +1,4 @@
-package com.ecommerce.orderservice.events;
+package com.productservice.productservice.events;
 
 import java.time.Instant;
 import java.util.List;

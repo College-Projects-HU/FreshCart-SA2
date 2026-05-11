@@ -13,6 +13,8 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 import com.ecommerce.userservice.exception.UnauthorizedException;
+import com.ecommerce.userservice.events.UserRegisteredEvent;
+import com.ecommerce.userservice.kafka.UserEventProducer;
 
 @Service
 @RequiredArgsConstructor
@@ -21,6 +23,7 @@ public class AuthService {
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final UserEventProducer userEventProducer;
 
     // ── Signup ────────────────────────────────────────────────────────────────
 
@@ -39,6 +42,8 @@ public class AuthService {
                 .build();
 
         User saved = userRepository.save(user);
+        userEventProducer.publishUserRegistered(new UserRegisteredEvent(
+                saved.getId(), saved.getName(), saved.getEmail(), Instant.now()));
         String token = jwtUtil.generateToken(saved);
         String refreshToken = UUID.randomUUID().toString();
 
@@ -74,7 +79,7 @@ public class AuthService {
         String token = jwtUtil.generateToken(user);
 
 
-        // Generate & persist refresh token 
+        // Generate & persist refresh token
         String refreshToken = UUID.randomUUID().toString();
         user.setRefreshToken(refreshToken);
         user.setRefreshTokenExpiry(Instant.now().plus(7, ChronoUnit.DAYS)); // e.g. 7 days validity for refresh token

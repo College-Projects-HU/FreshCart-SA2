@@ -24,6 +24,13 @@ spring:
           auth: true
           starttls:
             enable: true
+  kafka:
+    bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.add.type.headers: false
 
 jwt:
   secret: E-commerceFreshCart-WebSite-SecretKey
@@ -46,3 +53,9 @@ management:
     web:
       exposure:
         include: health,info
+
+app:
+  kafka:
+    topics:
+      user-registered: user.registered
+      user-deleted: user.deleted

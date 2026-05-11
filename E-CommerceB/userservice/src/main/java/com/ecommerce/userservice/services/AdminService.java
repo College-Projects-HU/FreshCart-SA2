@@ -11,6 +11,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ecommerce.userservice.events.UserDeletedEvent;
+import com.ecommerce.userservice.kafka.UserEventProducer;
+import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 
@@ -20,6 +23,7 @@ public class AdminService {
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final UserEventProducer userEventProducer;
 
     @Transactional(readOnly = true)
     public List<User> getAllUsers() {
@@ -28,13 +32,13 @@ public class AdminService {
 
     @Transactional
     public void deleteUser(Long id) {
-        if (!userRepository.existsById(id)) {
-            throw new RuntimeException("User not found");
-        }
-        if(userRepository.findById(id).get().getRole() == User.Role.admin){
+        User userToDelete = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        if (userToDelete.getRole() == User.Role.admin) {
             throw new RuntimeException("Cannot delete admin user");
         }
         userRepository.deleteById(id);
+        userEventProducer.publishUserDeleted(new UserDeletedEvent(id, userToDelete.getEmail(), Instant.now()));
     }
 
     @Transactional
@@ -98,4 +102,3 @@ public class AdminService {
         return auth.getAuthorities().stream().anyMatch(a -> "ROLE_ADMIN".equals(a.getAuthority()));
     }
 }
-

@@ -5,7 +5,9 @@ import com.productservice.productservice.entities.Brand;
 import com.productservice.productservice.entities.Category;
 import com.productservice.productservice.entities.Product;
 import com.productservice.productservice.entities.Subcategory;
+import com.productservice.productservice.events.ProductDeletedEvent;
 import com.productservice.productservice.exception.ResourceNotFoundException;
+import com.productservice.productservice.kafka.ProductEventProducer;
 import com.productservice.productservice.repos.BrandRepository;
 import com.productservice.productservice.repos.CategoryRepository;
 import com.productservice.productservice.repos.ProductRepository;
@@ -29,6 +31,7 @@ public class ProductAdminService {
     private final CategoryRepository  categoryRepository;
     private final BrandRepository     brandRepository;
     private final SubcategoryRepository subcategoryRepository;
+    private final ProductEventProducer eventProducer;
 
     public Product create(AdminUpsertProductRequest request) {
         Product product = new Product();
@@ -54,6 +57,7 @@ public class ProductAdminService {
             throw new ResourceNotFoundException("Product not found with id: " + id);
         }
         productRepository.deleteById(id);
+        eventProducer.publishProductDeleted(new ProductDeletedEvent(id, "deleted", Instant.now()));
     }
 // ── private helpers ──────────────────────────────────────────────────────
 
@@ -66,17 +70,17 @@ public class ProductAdminService {
         product.setImageCover(req.imageCover());
         product.setImages(req.images());
         product.setSold(0);
-        product.setRatingsAverage(0.0); 
+        product.setRatingsAverage(0.0);
         product.setRatingsQuantity(0);
         product.setCreatedAt(Instant.now());
         if (req.CategoryId() != null ) {
             Category cat = categoryRepository.findById(new ObjectId(req.CategoryId()))
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
-            
+
             product.setCategory(new Product.CategoryRef(
-                cat.getId().toHexString(), 
-                cat.getName(), 
-                cat.getSlug(), 
+                cat.getId().toHexString(),
+                cat.getName(),
+                cat.getSlug(),
                 cat.getImage()
             ));
         }
@@ -84,11 +88,11 @@ public class ProductAdminService {
         if (req.BrandId() != null ) {
             Brand brand = brandRepository.findById(req.BrandId())
                 .orElseThrow(() -> new ResourceNotFoundException("Brand not found"));
-            
+
             product.setBrand(new Product.BrandRef(
-                brand.getId(), 
-                brand.getName(), 
-                brand.getSlug(), 
+                brand.getId(),
+                brand.getName(),
+                brand.getSlug(),
                 brand.getImage()
             ));
         }
@@ -102,7 +106,7 @@ public class ProductAdminService {
                     return new Product.SubcategoryRef(
                         s.getId().toHexString(),
                         s.getName(),
-                        s.getSlug(), 
+                        s.getSlug(),
                         s.getCategory()
                     );
                 })

@@ -12,12 +12,23 @@ spring:
     password: ${DB_PASSWORD:0000}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
+  # ─── Kafka ───────────────────────────────────────────────────────────────
+  kafka:
+    bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    consumer:
+      group-id: cart-service-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+        spring.json.use.type.headers: false
+
   # ─── JPA / Hibernate ──────────────────────────────────────────────────────
   jpa:
     hibernate:
-      ddl-auto: update          # use 'validate' in production with Flyway/Liquibase
+      ddl-auto: update # use 'validate' in production with Flyway/Liquibase
     show-sql: true
-
 
 # ─── JWT ──────────────────────────────────────────────────────────────────────
 jwt:
@@ -35,16 +46,15 @@ eureka:
   instance:
     prefer-ip-address: true
 
-
 # ─── Inter-Service URLs ───────────────────────────────────────────────────────
 # These are used by WebClient to call ProductService and OrderService.
 # In a Eureka setup the service names are resolved automatically;
 # override with full URLs if you run without a discovery server.
 services:
   product-service:
-    url: ${PRODUCT_SERVICE_URL:http://PRODUCT-SERVICE}   # Eureka name or full URL
+    url: ${PRODUCT_SERVICE_URL:http://PRODUCT-SERVICE} # Eureka name or full URL
   order-service:
-    url: ${ORDER_SERVICE_URL:http://order-service}       # Eureka name or full URL
+    url: ${ORDER_SERVICE_URL:http://order-service} # Eureka name or full URL
 
 # ─── Logging ──────────────────────────────────────────────────────────────────
 logging:
@@ -52,3 +62,10 @@ logging:
     com.ecommerce.cartservice: DEBUG
     org.springframework.security: INFO
     org.hibernate.SQL: DEBUG
+
+app:
+  kafka:
+    topics:
+      order-created: order.created
+      product-deleted: product.deleted
+      user-deleted: user.deleted

@@ -2,6 +2,7 @@ package com.ecommerce.orderservice.service;
 
 import com.ecommerce.orderservice.clients.CartServiceClient;
 import com.ecommerce.orderservice.dto.*;
+import com.ecommerce.orderservice.events.OrderCreatedEvent;
 import com.ecommerce.orderservice.exception.CartNotFoundException;
 import com.ecommerce.orderservice.model.Order;
 import com.ecommerce.orderservice.model.OrderItem;
@@ -11,6 +12,7 @@ import com.ecommerce.orderservice.security.AuthenticatedUser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -39,6 +41,7 @@ public class OrderServiceImpl implements OrderService {
     private final ProductSnapshotParser snapshotParser;
     private final StripeService         stripeService;
     private final ObjectMapper          objectMapper;
+    private final ApplicationEventPublisher eventPublisher;
 
     // ─── 1. Create Cash Order ─────────────────────────────────────────────────
     @Override
@@ -60,9 +63,9 @@ public class OrderServiceImpl implements OrderService {
         Order order = Order.builder()
                 .orderId(UUID.randomUUID().toString())
                 .userId(caller.getId().toString())
-                .userName(caller.getUsername())       
-                .userEmail(caller.getEmail())         
-                .userPhone(shippingAddress.getPhone()) 
+                .userName(caller.getUsername())
+                .userEmail(caller.getEmail())
+                .userPhone(shippingAddress.getPhone())
                 .shippingAddress(shippingAddress)
                 .cartItems(items)
                 .totalOrderPrice(totalOrderPrice)
@@ -76,7 +79,16 @@ public class OrderServiceImpl implements OrderService {
         order = orderRepository.save(order);
         log.info("Order saved: id={}", order.getId());
 
-        cartServiceClient.clearMyCart("Bearer " + token);
+        List<OrderCreatedEvent.OrderItemEvent> eventItems = order.getCartItems().stream()
+                .map(i -> new OrderCreatedEvent.OrderItemEvent(i.getProductId(), i.getCount()))
+                .collect(Collectors.toList());
+        eventPublisher.publishEvent(new OrderCreatedEvent(
+                order.getOrderId(),
+                order.getUserId(),
+                eventItems,
+                order.getPaymentMethodType(),
+                order.getCreatedAt() != null ? order.getCreatedAt() : Instant.now()
+        ));
 
         return buildCreateOrderResponse(order, caller, shippingAddress,
                                         cartPrice, taxPrice, shippingPrice, totalOrderPrice);

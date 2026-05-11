@@ -4,6 +4,7 @@ import com.ecommerce.cartservice.entity.CartItem;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -14,4 +15,7 @@ public interface CartItemRepository extends JpaRepository<CartItem, Long> {
 
     /** Check if a product already exists in a cart (used before adding to avoid duplicates). */
     Optional<CartItem> findByCartIdAndProductId(Long cartId, String productId);
+
+    /** Find all cart items across all carts that reference a given product (used when a product is deleted). */
+    List<CartItem> findAllByProductId(String productId);
 }
