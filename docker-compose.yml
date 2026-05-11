@@ -145,6 +145,7 @@ services:
       SPRING_DATASOURCE_PASSWORD: root
       EUREKA_HOST: eureka-server
       EUREKA_PORT: 8761
+      CART_SERVICE_BASE_URL: http://cart-service:8083
       STRIPE_SECRET_KEY: sk_test_dummy
       STRIPE_WEBHOOK_SECRET: whsec_dummy
 
