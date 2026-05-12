@@ -8,10 +8,8 @@ import com.ecommerce.wishlistservice.entity.WishlistItem;
 import com.ecommerce.wishlistservice.exception.ResourceNotFoundException;
 import com.ecommerce.wishlistservice.repo.WishlistRepository;
 import com.ecommerce.wishlistservice.clients.ProductClient;
-import feign.FeignException;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -20,7 +18,6 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class WishlistServiceImpl implements WishlistService {
 
     private final WishlistRepository wishlistRepository;
@@ -67,24 +64,13 @@ public class WishlistServiceImpl implements WishlistService {
 
         Long userIdLong = Long.parseLong(userId);
         List<WishlistItem> wishlistItems = wishlistRepository.findAllByUserId(userIdLong);
-        List<WishlistItem> staleItems = new ArrayList<>();
         List<ProductDTO> products = new ArrayList<>();
 
         for (WishlistItem item : wishlistItems) {
-            try {
-                ProductResponseWrapper wrapper = productClient.getProductById(item.getProductId());
-                if (wrapper != null && wrapper.getData() != null) {
-                    products.add(wrapper.getData());
-                }
-            } catch (FeignException.NotFound ex) {
-                // Product was deleted or unavailable in product service; clean stale reference.
-                staleItems.add(item);
-                log.warn("Removing stale wishlist item for userId={} productId={}", userIdLong, item.getProductId());
+            ProductResponseWrapper wrapper = productClient.getProductById(item.getProductId());
+            if (wrapper != null && wrapper.getData() != null) {
+                products.add(wrapper.getData());
             }
-        }
-
-        if (!staleItems.isEmpty()) {
-            wishlistRepository.deleteAll(staleItems);
         }
 
         return new FullWishlistResponse("success", products.size(), products);

@@ -47,14 +47,12 @@ eureka:
     prefer-ip-address: true
 
 # ─── Inter-Service URLs ───────────────────────────────────────────────────────
-# These are used by WebClient to call ProductService and OrderService.
-# In a Eureka setup the service names are resolved automatically;
-# override with full URLs if you run without a discovery server.
+# This is used by WebClient to call ProductService.
+# In a Eureka setup the service name is resolved automatically;
+# override with a full URL if you run without a discovery server.
 services:
   product-service:
     url: ${PRODUCT_SERVICE_URL:http://PRODUCT-SERVICE} # Eureka name or full URL
-  order-service:
-    url: ${ORDER_SERVICE_URL:http://order-service} # Eureka name or full URL
 
 # ─── Logging ──────────────────────────────────────────────────────────────────
 logging:

@@ -12,12 +12,9 @@ public class WebClientConfig {
     @Value("${services.product-service.url}")
     private String productServiceUrl;
 
-    @Value("${services.order-service.url}")
-    private String orderServiceUrl;
-
     // ─── Explicitly declare the builder bean ──────────────────────────────────
     // Spring Boot 4.x no longer auto-registers WebClient.Builder in servlet apps.
-    // We declare it manually so our two WebClient beans can inject it.
+    // We declare it manually so our WebClient bean can inject it.
     @Bean
     @LoadBalanced 
     public WebClient.Builder webClientBuilder() {
@@ -28,14 +25,6 @@ public class WebClientConfig {
     public WebClient productServiceWebClient(WebClient.Builder builder) {
         return builder
                 .baseUrl(productServiceUrl)
-                .defaultHeader("Content-Type", "application/json")
-                .build();
-    }
-
-    @Bean("orderServiceWebClient")
-    public WebClient orderServiceWebClient(WebClient.Builder builder) {
-        return builder
-                .baseUrl(orderServiceUrl)
                 .defaultHeader("Content-Type", "application/json")
                 .build();
     }
