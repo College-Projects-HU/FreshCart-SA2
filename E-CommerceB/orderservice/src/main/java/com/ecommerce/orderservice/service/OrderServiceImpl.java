@@ -224,6 +224,19 @@ public class OrderServiceImpl implements OrderService {
         order.setPaidAt(Instant.now());
         orderRepository.save(order);
         log.info("Order marked as paid via Stripe webhook: orderId={}", orderId);
+
+        // Publish the same event used by cash orders so downstream consumers
+        // (cart-service, product-service) perform their post-order actions.
+        List<OrderCreatedEvent.OrderItemEvent> eventItems = order.getCartItems().stream()
+                .map(i -> new OrderCreatedEvent.OrderItemEvent(i.getProductId(), i.getCount()))
+                .collect(Collectors.toList());
+        eventPublisher.publishEvent(new OrderCreatedEvent(
+                order.getOrderId(),
+                order.getUserId(),
+                eventItems,
+                order.getPaymentMethodType(),
+                order.getCreatedAt() != null ? order.getCreatedAt() : Instant.now()
+        ));
     }
 
     // ─── Private: Cart Helpers ────────────────────────────────────────────────

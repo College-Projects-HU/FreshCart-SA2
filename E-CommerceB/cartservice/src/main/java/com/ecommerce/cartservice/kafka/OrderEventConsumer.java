@@ -8,6 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
+import java.util.Map;
+
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -18,15 +20,21 @@ public class OrderEventConsumer {
     @KafkaListener(topics = "${app.kafka.topics.order-created:order.created}",
                    groupId = "${spring.kafka.consumer.group-id:cart-service-group}",
                    containerFactory = "kafkaListenerContainerFactory")
-    public void onOrderCreated(OrderCreatedEvent event) {
-        log.info("Received order.created event: orderId={}, userId={}", event.orderId(), event.userId());
+    public void onOrderCreated(Map<String, Object> payload) {
+        String orderId = payload != null && payload.get("orderId") != null ? String.valueOf(payload.get("orderId")) : "unknown";
+        String userId = payload != null && payload.get("userId") != null ? String.valueOf(payload.get("userId")) : null;
+        log.info("Received order.created event: orderId={}, userId={}", orderId, userId);
+        if (userId == null || userId.isBlank()) {
+            log.warn("Skipping order.created event without userId: {}", payload);
+            return;
+        }
         try {
-            cartService.clearCart(event.userId());
-            log.info("Cart cleared for userId={} after order orderId={}", event.userId(), event.orderId());
+            cartService.clearCart(userId);
+            log.info("Cart cleared for userId={} after order orderId={}", userId, orderId);
         } catch (ResourceNotFoundException e) {
-            log.warn("No cart found for userId={} — already cleared or never existed", event.userId());
+            log.warn("No cart found for userId={} — already cleared or never existed", userId);
         } catch (Exception e) {
-            log.error("Failed to clear cart for userId={}: {}", event.userId(), e.getMessage());
+            log.error("Failed to clear cart for userId={}: {}", userId, e.getMessage());
         }
     }
 }

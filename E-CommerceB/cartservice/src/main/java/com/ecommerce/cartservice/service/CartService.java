@@ -117,7 +117,10 @@ public class CartService {
         log.info("Clearing cart for user {}", userId);
 
         Cart cart = findCartByOwner(userId);
-        cart.getItems().clear();
+        // Remove through aggregate helper to keep both sides of the relation in sync.
+        while (!cart.getItems().isEmpty()) {
+            cart.removeItem(cart.getItems().get(0));
+        }
         cart.recalculateTotal();
         cartRepository.save(cart);
 
