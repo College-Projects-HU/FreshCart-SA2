@@ -48,8 +48,6 @@ management:
 jwt:
   secret: E-commerceFreshCart-WebSite-SecretKey
   expiration: 600000 # 10 minutes
-  server:
-  port: 8082
 
 app:
   kafka:

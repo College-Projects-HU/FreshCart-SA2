@@ -10,10 +10,11 @@ services:
     volumes:
       - users-data:/var/lib/mysql
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-proot"]
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -proot"]
       interval: 10s
       timeout: 5s
       retries: 5
+      start_period: 30s
 
   products-db:
     image: mongo:7
@@ -37,10 +38,11 @@ services:
     volumes:
       - carts-data:/var/lib/mysql
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-proot"]
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -proot"]
       interval: 10s
       timeout: 5s
       retries: 5
+      start_period: 30s
 
   orders-db:
     image: mysql:8
@@ -51,9 +53,10 @@ services:
     volumes:
       - orders-data:/var/lib/mysql
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-proot"]
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -proot"]
       interval: 10s
       timeout: 5s
+      start_period: 30s
       retries: 5
 
   wishlist-db:
@@ -65,9 +68,10 @@ services:
     volumes:
       - wishlist-data:/var/lib/mysql
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-proot"]
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -proot"]
       interval: 10s
       timeout: 5s
+      start_period: 30s
       retries: 5
 
   # ── Message Broker ──────────────────
