@@ -43,6 +43,7 @@ export class CheckoutComponent implements OnInit {
         this.cartService.createCashOrder(this.cartId() , this.checkOut.value).subscribe({
           next:(res)=> {
             if(res.status === 'success'){
+                  this.cartService.cartCount.set(0);
                   this.router.navigate(['/allorders']);
                   
             }
@@ -69,4 +70,3 @@ export class CheckoutComponent implements OnInit {
 function computed(arg0: () => number) {
   throw new Error('Function not implemented.');
 }
-

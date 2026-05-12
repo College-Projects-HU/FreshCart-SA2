@@ -52,9 +52,13 @@ public class OrderEventConsumer {
             productRepository.findById(productId).ifPresentOrElse(product -> {
                 int currentQty = product.getQuantity() != null ? product.getQuantity() : 0;
                 int newQty = Math.max(0, currentQty - count);
+                int currentSold = product.getSold() != null ? product.getSold() : 0;
+                int newSold = currentSold + Math.max(0, count);
                 product.setQuantity(newQty);
+                product.setSold(newSold);
                 productRepository.save(product);
-                log.info("Decremented stock for productId={}: {} -> {}", productId, currentQty, newQty);
+                log.info("Updated product inventory for productId={}: quantity {} -> {}, sold {} -> {}",
+                        productId, currentQty, newQty, currentSold, newSold);
             }, () -> log.warn("Product not found for stock decrement: productId={}", productId));
         }
     }
